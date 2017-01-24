@@ -83,7 +83,7 @@ browser.save_screenshot('C:\myproject\API\screen.jpg')
 time.sleep(60) #two options take ca.30s
 
 #download
-download_page = browser.get('https://app.fitabase.com/DownloadData/Project/f4def67f-9081-4534-bbf4-3741be7d59df')
+download_page = browser.get('.....')
 html          = browser.page_source
 soup          = BeautifulSoup(html)
 variable      = soup.find_all('a')[5]
