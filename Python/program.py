@@ -39,8 +39,8 @@ browser.get('https://app.fitabase.com/DownloadData/CreateBatch/f4def67f-9081-453
 #log in
 username = browser.find_element_by_id('UserName')
 password = browser.find_element_by_id('Password')
-username.send_keys('....')
-password.send_keys('....')
+username.send_keys('***')
+password.send_keys('***')
 login_attempt = browser.find_element_by_xpath("//*[@type='submit']")
 login_attempt.submit()
 
@@ -104,19 +104,14 @@ filename = glob.glob("*.zip")
 new = str(filename).strip("'[]'") #xxx.zip
 ##unzip
 path = 'C:\myproject\API\\' + new
-zip_ref = zipfile.ZipFile(path, 'r')  #Got error, IOError: [Errno 2] No such file or directory: 'C:\\myproject\\API\\'
+zip_ref = zipfile.ZipFile(path, 'r')
 zip_ref.extractall('C:\myproject\API')
 zip_ref.close()
 print new + ' is unzipped'
 
-os.remove(path)
+os.remove(path)#delete file
 
-#upload files to database & delete files
-#file name
-csvfiles = glob.glob(r'C:\myproject\API\*.csv')
-new1 = str(csvfiles[0]).strip("''") #with path and extension
-new2 = os.path.splitext(os.path.basename(new))[0] #only file name
-
+##upload files to database & delete files
 #connector
 conn = MySQLdb.connect (user="root",
                         host="localhost",
@@ -125,50 +120,35 @@ cursor = conn.cursor()
 
 
 #intensity
+new2 = day2   
 cursor.execute("INSERT INTO history (name) VALUES (%s)", {new2})
-int_data = csv.reader(file(new1,'rU'))
-
-int_data.next()
-for row in int_data:
-    gettime = datetime.strptime(row[1], '%m/%d/%Y %H:%M:%S %p')
-    gettime = gettime.strftime('%Y-%m-%d %H:%M:%S')
-    cursor.execute('INSERT INTO intens(record_ID, ID, in_time, intensity)' \
-                   'VALUES(LAST_INSERT_ID(), %s, %s, %s)', (row[0], gettime, row[2]))
-
+cursor.execute("LOAD DATA LOCAL INFILE 'C:\\\myproject\\\API\\\minuteIntensitiesNarrow_merged.csv' INTO TABLE intens FIELDS TERMINATED BY ',' \
+                IGNORE 1 LINES (ID, @timevar, intensity) \
+                set in_time = STR_TO_DATE(@timevar, '%m/%d/%Y %r'),\
+                    record_ID = LAST_INSERT_ID()")
 conn.commit()
 print "Intensity uploaded!"
-os.remove(new1)
-
+os.remove('C:\\\myproject\\\API\\\minuteIntensitiesNarrow_merged.csv')#delete file
+print "Intensity deleted!"
 
 #step
-filename = glob.glob(r'C:\myproject\API\*.csv')
-new1 = str(filename[0]).strip("''") #with path and extension
-int_data = csv.reader(file(new1,'rU'))
-
-int_data.next()
-for row in int_data:
-    gettime = datetime.strptime(row[1], '%m/%d/%Y %H:%M:%S %p')
-    gettime = gettime.strftime('%Y-%m-%d %H:%M:%S')
-    cursor.execute('INSERT INTO step(ID, st_time, step)' \
-                   'VALUES(%s, %s, %s)', (row[0], gettime, row[2]))
-
+cursor.execute("LOAD DATA LOCAL INFILE 'C:\\\myproject\\\API\\\minuteStepsNarrow_merged.csv' INTO TABLE step FIELDS TERMINATED BY ',' \
+                IGNORE 1 LINES (ID, @timevar, step)\
+                set st_time = STR_TO_DATE(@timevar, '%m/%d/%Y %r')")
 conn.commit()
-os.remove(new1)
 print "Step uploaded!"
-
+os.remove('C:\\\myproject\\\API\\\minuteStepsNarrow_merged.csv')#delete file
+print "Step deleted!"
 
 #sleep
-filename = glob.glob(r'C:\myproject\API\*.csv')
-new1 = str(filename[0]).strip("''") #with path and extension
-int_data = csv.reader(file(file(new1,'rU'))
-
-int_data.next()
-for row in int_data:
-    gettime = datetime.strptime(row[1], '%m/%d/%Y %H:%M:%S %p')
-    gettime = gettime.strftime('%Y-%m-%d %H:%M:%S')
-    cursor.execute('INSERT INTO sleep(ID, sl_time, sleep, logid)' \
-                   'VALUES(%s, %s, %s, %s)', (row[0], gettime, row[2], row[3]))
-
+cursor.execute("LOAD DATA LOCAL INFILE 'C:\\\myproject\\\API\\\minuteSleep_merged.csv' INTO TABLE sleep FIELDS TERMINATED BY ',' \
+                IGNORE 1 LINES (ID, @timevar, sleep)\
+                set sl_time = STR_TO_DATE(@timevar, '%m/%d/%Y %r')")
 conn.commit()
-os.remove(new1)
 print "Sleep uploaded!"
+os.remove('C:\\\myproject\\\API\\\minuteSleep_merged.csv')#delete file
+print "Sleep deleted!"
+
+print "Finished upload the data of" + day2
+
+
