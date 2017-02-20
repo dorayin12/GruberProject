@@ -26,7 +26,7 @@ name_date = daypoint2.strftime('%m-%d-%Y') #show only date
 
 
 #browser set up
-#phantomjs = 'C:\myproject\API\phantomjs.exe'
+#phantomjs = 'C:\myproject\API\phantomjs.exe' #run prgram without opening a browser
 #browser = webdriver.PhantomJS(phantomjs)
 chromeOptions = webdriver.ChromeOptions()
 prefs = {'download.default_directory' : 'C:\myproject\API'} #change default location
@@ -39,8 +39,8 @@ browser.get('https://app.fitabase.com/DownloadData/CreateBatch/f4def67f-9081-453
 #log in
 username = browser.find_element_by_id('UserName')
 password = browser.find_element_by_id('Password')
-username.send_keys('xxxxxx')
-password.send_keys('xxxxxx')
+username.send_keys('ahgruber')
+password.send_keys('iubmlPA2015')
 login_attempt = browser.find_element_by_xpath("//*[@type='submit']")
 login_attempt.submit()
 
