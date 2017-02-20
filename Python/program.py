@@ -18,11 +18,11 @@ import sys
 
 
 #days
-lastweek  = datetime.now() - timedelta(days=130)  #last week today
-day1      = lastweek.strftime('%m/%d/%Y') #end
-yesterday = datetime.now() - timedelta(days = 131)  #last week 
-day2      = yesterday.strftime('%m/%d/%Y') #start
-name_date = yesterday.strftime('%m-%d-%Y %I_%M%p')
+daypoint1  = datetime.now() - timedelta(days=30)  #last week today
+day1      = daypoint1.strftime('%m/%d/%Y') #end
+daypoint2 = datetime.now() - timedelta(days = 30)  #last week 
+day2      = daypoint2.strftime('%m/%d/%Y') #start
+name_date = daypoint2.strftime('%m-%d-%Y') #show only date
 
 
 #browser set up
@@ -39,8 +39,8 @@ browser.get('https://app.fitabase.com/DownloadData/CreateBatch/f4def67f-9081-453
 #log in
 username = browser.find_element_by_id('UserName')
 password = browser.find_element_by_id('Password')
-username.send_keys('***')
-password.send_keys('***')
+username.send_keys('xxxxxx')
+password.send_keys('xxxxxx')
 login_attempt = browser.find_element_by_xpath("//*[@type='submit']")
 login_attempt.submit()
 
@@ -52,7 +52,7 @@ browser.find_element_by_id('EndDate').clear()
 exportname = browser.find_element_by_id('Name')
 startdate = browser.find_element_by_id('StartDate')
 enddate = browser.find_element_by_id('EndDate')
-exportname.send_keys('Export-'+ name_date)
+exportname.send_keys('Export-'+ name_date) #job name contains only date
 startdate.send_keys(day2)
 enddate.send_keys(day1)
 
@@ -149,6 +149,19 @@ print "Sleep uploaded!"
 os.remove('C:\\\myproject\\\API\\\minuteSleep_merged.csv')#delete file
 print "Sleep deleted!"
 
-print "Finished upload the data of" + day2
+print "Finished upload the data of " + day2
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
