@@ -18,7 +18,7 @@ import time
 import sys
 
 StartDate = raw_input("Please enter a start date. You can hit the enter key to get data from last month.")
-EndDate   = raw_input("Please enter an end date. You can hit the enter key to get data from last month.")
+EndDate   = raw_input("Please enter an end date. It can be the same date. You can also hit the enter key to get data from last month.")
 if StartDate:
     #days
     day1      = EndDate
@@ -39,8 +39,8 @@ if StartDate:
     #log in
     username = browser.find_element_by_id('UserName')
     password = browser.find_element_by_id('Password')
-    username.send_keys('....') #replace with username
-    password.send_keys('....') #replace with passwrod
+    username.send_keys('ahgruber')
+    password.send_keys('iubmlPA2015')
     login_attempt = browser.find_element_by_xpath("//*[@type='submit']")
     login_attempt.submit()
 
@@ -96,64 +96,7 @@ if StartDate:
     link          = 'https://app.fitabase.com' + variable.attrs['href']
     browser.get(link)
     print 'Download!'
-
-    #unzip file and delete zip file
-    #find zip file
-    os.chdir('C:/myproject/API')
-    filename = glob.glob("*.zip")
-    new = str(filename).strip("'[]'")
-
-    ##unzip
-    path = 'C:/myproject/API/' + new
-    zip_ref = zipfile.ZipFile(path, 'r')
-    zip_ref.extractall('C:/myproject/API')
-    zip_ref.close()
-    print new + ' is unzipped'
-
-    os.remove(path)#delete file
-    print "Delete zip file & start uploading"
-
-    ##upload files to database & delete files
-    #connector
-    conn = MySQLdb.connect (user="root",
-                            host="localhost",
-                            db="fitabase")
-    cursor = conn.cursor()
-
-
-    #intensity
-    new2 = name_date   
-    cursor.execute("INSERT INTO history (name) VALUES (%s)", {new2})
-    cursor.execute("LOAD DATA LOCAL INFILE 'C:\\\myproject\\\API\\\minuteIntensitiesNarrow_merged.csv' INTO TABLE intens FIELDS TERMINATED BY ',' \
-                    IGNORE 1 LINES (ID, @timevar, intensity) \
-                    set in_time = STR_TO_DATE(@timevar, '%m/%d/%Y %r'),\
-                        record_ID = LAST_INSERT_ID()")
-    conn.commit()
-    print "Intensity uploaded!"
-    os.remove('C:\\\myproject\\\API\\\minuteIntensitiesNarrow_merged.csv')#delete file
-    print "Intensity deleted!"
-
-    #step
-    cursor.execute("LOAD DATA LOCAL INFILE 'C:\\\myproject\\\API\\\minuteStepsNarrow_merged.csv' INTO TABLE step FIELDS TERMINATED BY ',' \
-                    IGNORE 1 LINES (ID, @timevar, step)\
-                    set st_time = STR_TO_DATE(@timevar, '%m/%d/%Y %r')")
-    conn.commit()
-    print "Step uploaded!"
-    os.remove('C:\\\myproject\\\API\\\minuteStepsNarrow_merged.csv')#delete file
-    print "Step deleted!"
-
-    #sleep
-    cursor.execute("LOAD DATA LOCAL INFILE 'C:\\\myproject\\\API\\\minuteSleep_merged.csv' INTO TABLE sleep FIELDS TERMINATED BY ',' \
-                    IGNORE 1 LINES (ID, @timevar, sleep)\
-                    set sl_time = STR_TO_DATE(@timevar, '%m/%d/%Y %r')")
-    conn.commit()
-    print "Sleep uploaded!"
-    os.remove('C:\\\myproject\\\API\\\minuteSleep_merged.csv')#delete file
-    print "Sleep deleted!"
-
-    print "Finished upload the data of " + day2 + '-' + day1
-
-
+    
 else:    
 
     #days
@@ -178,8 +121,8 @@ else:
     #log in
     username = browser.find_element_by_id('UserName')
     password = browser.find_element_by_id('Password')
-    username.send_keys('....') #replace with username
-    password.send_keys('....') #replace with passwrod
+    username.send_keys('ahgruber')
+    password.send_keys('iubmlPA2015')
     login_attempt = browser.find_element_by_xpath("//*[@type='submit']")
     login_attempt.submit()
 
@@ -236,6 +179,10 @@ else:
     browser.get(link)
     print 'Download!'
 
+    
+Decision    = raw_input("Do you want to input the data? Y for yes, N for no")
+
+if Decision == 'Y':
     #unzip file and delete zip file
     #find zip file
     os.chdir('C:/myproject/API')
@@ -292,4 +239,6 @@ else:
 
     print "Finished upload the data of " + day2 + '-' + day1
 
-
+else:
+    print "Done."
+    
