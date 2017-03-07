@@ -3,7 +3,6 @@
 #The local path is C:\myproject\API
 
 
-
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from datetime import datetime, timedelta
@@ -17,8 +16,8 @@ import csv
 import time
 import sys
 
-StartDate = raw_input("Please enter a start date. You can hit the enter key to get data from last month.")
-EndDate   = raw_input("Please enter an end date. It can be the same date. You can also hit the enter key to get data from last month.")
+StartDate = raw_input("Please enter a start date (m/d/yyy). You can hit the enter key to get data from last month.")
+EndDate   = raw_input("Please enter an end date(m/d/yyy). It can be the same date. You can also hit the enter key to get data from last month.")
 if StartDate:
     #days
     day1      = EndDate
@@ -26,19 +25,19 @@ if StartDate:
     name_date = day2 + '-' + day1
 
     #browser set up
-    ##phantomjs = 'C:\myproject\API\phantomjs.exe' #run prgram without opening a browser
-    ##browser = webdriver.PhantomJS(phantomjs)
+    ##phantomjs   = 'C:\myproject\API\phantomjs.exe' #run prgram without opening a browser
+    ##browser     = webdriver.PhantomJS(phantomjs)
     chromeOptions = webdriver.ChromeOptions()
-    prefs = {'download.default_directory' : 'C:\myproject\API'} #change default location
+    prefs         = {'download.default_directory' : 'C:\myproject\API'} #change default location
     chromeOptions.add_experimental_option('prefs',prefs)
-    chromedriver = 'C:\myproject\API\chromedriver.exe'
-    browser = webdriver.Chrome(chromedriver, chrome_options=chromeOptions)
+    chromedriver  = 'C:\myproject\API\chromedriver.exe'
+    browser       = webdriver.Chrome(chromedriver, chrome_options=chromeOptions)
     browser.get('https://app.fitabase.com/DownloadData/CreateBatch/f4def67f-9081-4534-bbf4-3741be7d59df')
 
 
     #log in
-    username = browser.find_element_by_id('UserName')
-    password = browser.find_element_by_id('Password')
+    username      = browser.find_element_by_id('UserName')
+    password      = browser.find_element_by_id('Password')
     username.send_keys('ahgruber')
     password.send_keys('iubmlPA2015')
     login_attempt = browser.find_element_by_xpath("//*[@type='submit']")
@@ -50,8 +49,8 @@ if StartDate:
     browser.find_element_by_id('EndDate').clear()
 
     exportname = browser.find_element_by_id('Name')
-    startdate = browser.find_element_by_id('StartDate')
-    enddate = browser.find_element_by_id('EndDate')
+    startdate  = browser.find_element_by_id('StartDate')
+    enddate    = browser.find_element_by_id('EndDate')
     exportname.send_keys('Export-'+ name_date) #job name contains only date
     startdate.send_keys(day2)
     enddate.send_keys(day1)
@@ -100,7 +99,7 @@ if StartDate:
 else:    
 
     #days
-    daypoint1  = datetime.now() - timedelta(days=30)  #last week today
+    daypoint1 = datetime.now() - timedelta(days=30)  #last week today
     day1      = daypoint1.strftime('%m/%d/%Y') #end
     daypoint2 = datetime.now() - timedelta(days = 60)  #last week 
     day2      = daypoint2.strftime('%m/%d/%Y') #start
@@ -108,19 +107,19 @@ else:
 
 
     #browser set up
-    ##phantomjs = 'C:\myproject\API\phantomjs.exe' #run prgram without opening a browser
-    ##browser = webdriver.PhantomJS(phantomjs)
+    ##phantomjs   = 'C:\myproject\API\phantomjs.exe' #run prgram without opening a browser
+    ##browser     = webdriver.PhantomJS(phantomjs)
     chromeOptions = webdriver.ChromeOptions()
-    prefs = {'download.default_directory' : 'C:\myproject\API'} #change default location
+    prefs         = {'download.default_directory' : 'C:\myproject\API'} #change default location
     chromeOptions.add_experimental_option('prefs',prefs)
-    chromedriver = 'C:\myproject\API\chromedriver.exe'
-    browser = webdriver.Chrome(chromedriver, chrome_options=chromeOptions)
+    chromedriver  = 'C:\myproject\API\chromedriver.exe'
+    browser       = webdriver.Chrome(chromedriver, chrome_options=chromeOptions)
     browser.get('https://app.fitabase.com/DownloadData/CreateBatch/f4def67f-9081-4534-bbf4-3741be7d59df')
 
 
     #log in
-    username = browser.find_element_by_id('UserName')
-    password = browser.find_element_by_id('Password')
+    username      = browser.find_element_by_id('UserName')
+    password      = browser.find_element_by_id('Password')
     username.send_keys('ahgruber')
     password.send_keys('iubmlPA2015')
     login_attempt = browser.find_element_by_xpath("//*[@type='submit']")
@@ -131,9 +130,9 @@ else:
     browser.find_element_by_id('StartDate').clear()
     browser.find_element_by_id('EndDate').clear()
 
-    exportname = browser.find_element_by_id('Name')
-    startdate = browser.find_element_by_id('StartDate')
-    enddate = browser.find_element_by_id('EndDate')
+    exportname   = browser.find_element_by_id('Name')
+    startdate    = browser.find_element_by_id('StartDate')
+    enddate      = browser.find_element_by_id('EndDate')
     exportname.send_keys('Export-'+ name_date) #job name contains only date
     startdate.send_keys(day2)
     enddate.send_keys(day1)
@@ -187,10 +186,10 @@ if Decision == 'Y':
     #find zip file
     os.chdir('C:/myproject/API')
     filename = glob.glob("*.zip")
-    new = str(filename).strip("'[]'")
+    new      = str(filename).strip("'[]'")
 
     ##unzip
-    path = 'C:/myproject/API/' + new
+    path    = 'C:/myproject/API/' + new
     zip_ref = zipfile.ZipFile(path, 'r')
     zip_ref.extractall('C:/myproject/API')
     zip_ref.close()
@@ -201,14 +200,14 @@ if Decision == 'Y':
 
     ##upload files to database & delete files
     #connector
-    conn = MySQLdb.connect (user="root",
+    conn   = MySQLdb.connect (user="root",
                             host="localhost",
                             db="fitabase")
     cursor = conn.cursor()
 
 
     #intensity
-    new2 = name_date   
+    new2   = name_date   
     cursor.execute("INSERT INTO history (name) VALUES (%s)", {new2})
     cursor.execute("LOAD DATA LOCAL INFILE 'C:\\\myproject\\\API\\\minuteIntensitiesNarrow_merged.csv' INTO TABLE intens FIELDS TERMINATED BY ',' \
                     IGNORE 1 LINES (ID, @timevar, intensity) \
