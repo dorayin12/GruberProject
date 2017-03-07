@@ -1,7 +1,7 @@
 #This is the program for the entire process
 #Seperated jobs include download, unzip
 #The local path is C:\myproject\API
-#This is writen by Wenjuan Sang, from IU Research Analytics
+
 
 
 from selenium import webdriver
